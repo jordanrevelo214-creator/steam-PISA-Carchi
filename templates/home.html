@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio - STEAM PISA{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 50px;">
+    <h2>¡Bienvenido al Sistema STEAM PISA!</h2>
+    <p style="margin: 20px 0;">
+        Sistema de evaluación educativa para mejorar capacidades en pruebas internacionales
+    </p>
+    
+    <div style="margin-top: 30px;">
+        <a href="/admin/" class="btn">Panel de Administración</a>
+        <a href="{% url 'evaluaciones:lista' %}" class="btn">Ver Evaluaciones</a>
+    </div>
+
+    <!-- Demo de HTMX -->
+    <div style="margin-top: 50px; padding: 20px; background: white; border-radius: 5px;">
+        <h3>Demo HTMX - Sin recargar página</h3>
+        <button hx-get="/evaluaciones/" 
+                hx-target="#resultado"
+                class="btn">
+            Cargar Evaluaciones con HTMX
+        </button>
+        <div id="resultado" style="margin-top: 20px;"></div>
+    </div>
+</div>
+{% endblock %}
