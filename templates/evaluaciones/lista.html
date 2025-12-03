@@ -1,10 +1,81 @@
 {% extends 'base.html' %}
 
+{% block title %}Evaluaciones Disponibles{% endblock %}
+
 {% block content %}
-<h2>Lista de Evaluaciones</h2>
-<p>Aquí aparecerán las evaluaciones disponibles</p>
-<div style="background: white; padding: 20px; border-radius: 5px; margin-top: 20px;">
-    <p>✅ HTMX funcionando correctamente</p>
-    <p>Sistema listo para crear evaluaciones</p>
+<div style="background: white; padding: 30px; border-radius: 10px;">
+    <h2 style="margin-bottom: 20px; color: #2c3e50;">📚 Evaluaciones Disponibles</h2>
+    
+    <!-- Info de debug temporal -->
+    <div style="padding: 10px; background: #e8f4f8; border-left: 4px solid #3498db; margin-bottom: 20px;">
+        <strong>🔍 Debug:</strong> Se encontraron {{ evaluaciones|length }} evaluaciones
+    </div>
+    
+    {% if evaluaciones %}
+        <div style="display: grid; gap: 20px;">
+        {% for evaluacion in evaluaciones %}
+            <div style="border: 2px solid #3498db; padding: 20px; border-radius: 8px; background: #f8f9fa;">
+                <h3 style="color: #2c3e50; margin-bottom: 10px;">
+                    {{ evaluacion.titulo }}
+                </h3>
+                <p style="color: #666; margin-bottom: 10px;">
+                    {{ evaluacion.descripcion }}
+                </p>
+                <div style="display: flex; gap: 20px; margin-bottom: 15px; color: #555; flex-wrap: wrap;">
+                    <span>📊 Área: <strong>{{ evaluacion.get_area_display }}</strong></span>
+                    <span>⏱️ Duración: <strong>{{ evaluacion.duracion_minutos }} minutos</strong></span>
+                    <span>❓ Preguntas: <strong>{{ evaluacion.total_preguntas }}</strong></span>
+                </div>
+                
+                {% if user.is_authenticated %}
+                    <a href="{% url 'evaluaciones:iniciar' evaluacion.id %}" 
+                       class="btn"
+                       style="display: inline-block; padding: 12px 24px; background: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                        🚀 Comenzar Evaluación
+                    </a>
+                {% else %}
+                    <div style="padding: 10px; background: #fff3cd; border-left: 4px solid #ffc107; margin-top: 10px;">
+                        ⚠️ Debes <a href="/admin/login/?next={{ request.path }}" style="color: #856404; text-decoration: underline;">iniciar sesión</a> para hacer esta evaluación
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 60px 20px; background: #f8f9fa; border-radius: 8px; margin-top: 20px; border: 2px dashed #dee2e6;">
+            <div style="font-size: 48px; margin-bottom: 20px;">📭</div>
+            <h3 style="color: #6c757d; margin-bottom: 10px;">No hay evaluaciones disponibles</h3>
+            <p style="color: #868e96;">
+                Por el momento no hay evaluaciones activas.
+            </p>
+            {% if user.is_superuser %}
+            <p style="margin-top: 20px;">
+                <a href="/admin/evaluaciones/evaluacion/add/" 
+                   class="btn"
+                   style="display: inline-block; padding: 12px 24px; background: #28a745; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                    ➕ Crear Nueva Evaluación (Admin)
+                </a>
+            </p>
+            {% endif %}
+        </div>
+    {% endif %}
+    
+    <!-- Información técnica (remover en producción) -->
+    <details style="margin-top: 30px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+        <summary style="cursor: pointer; font-weight: bold; color: #495057;">🔧 Información Técnica</summary>
+        <div style="margin-top: 15px; font-family: monospace; font-size: 12px; color: #6c757d;">
+            <p><strong>Usuario:</strong> {{ user }} {% if user.is_authenticated %}(autenticado){% else %}(anónimo){% endif %}</p>
+            <p><strong>Total evaluaciones cargadas:</strong> {{ evaluaciones|length }}</p>
+            <p><strong>Ruta actual:</strong> {{ request.path }}</p>
+            {% if evaluaciones %}
+            <p><strong>Evaluaciones encontradas:</strong></p>
+            <ul style="margin-left: 20px;">
+            {% for e in evaluaciones %}
+                <li>{{ e.titulo }} (ID: {{ e.id }}, Activa: {{ e.activa }})</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </details>
 </div>
 {% endblock %}

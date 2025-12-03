@@ -1,0 +1,50 @@
+<div id="pregunta-container">
+    <!-- Barra de progreso -->
+    <div class="barra-progreso">
+        <div class="barra-progreso-fill" style="width: {{ progreso }}%;">
+            {{ progreso }}%
+        </div>
+    </div>
+    
+    <p style="margin-bottom: 20px; color: #666;">
+        Pregunta {{ numero_pregunta }} de {{ total_preguntas }}
+    </p>
+
+    <div class="pregunta-container">
+        <h3 style="color: #2c3e50; margin-bottom: 20px;">
+            {{ pregunta.texto }}
+        </h3>
+        
+        {% if pregunta.imagen %}
+        <img src="{{ pregunta.imagen.url }}" 
+             alt="Imagen de la pregunta" 
+             style="max-width: 100%; margin-bottom: 20px; border-radius: 8px;">
+        {% endif %}
+        
+        <form hx-post="/evaluaciones/intento/{{ intento.id }}/pregunta/{{ pregunta.id }}/responder/"
+              hx-target="#pregunta-container"
+              hx-swap="outerHTML"
+              hx-indicator="#loading"
+              style="margin-top: 20px;">
+            
+            {% csrf_token %}
+            
+            {% for opcion in pregunta.opciones.all %}
+            <label class="opcion">
+                <input type="radio" 
+                       name="opcion" 
+                       value="{{ opcion.id }}" 
+                       required>
+                {{ opcion.texto }}
+            </label>
+            {% endfor %}
+            
+            <button type="submit" 
+                    class="btn" 
+                    style="margin-top: 20px; width: 100%; padding: 15px; font-size: 16px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                <span id="loading" class="htmx-indicator">⏳ Cargando...</span>
+                <span>➡️ Siguiente Pregunta</span>
+            </button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Resultados - {{ intento.evaluacion.titulo }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .resultado-card {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    .puntaje-grande {
+        font-size: 72px;
+        font-weight: bold;
+        color: {% if porcentaje >= 70 %}#2ecc71{% elif porcentaje >= 50 %}#f39c12{% else %}#e74c3c{% endif %};
+    }
+    .respuesta-item {
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border-left: 4px solid;
+    }
+    .correcta {
+        background: #d4edda;
+        border-color: #28a745;
+    }
+    .incorrecta {
+        background: #f8d7da;
+        border-color: #dc3545;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="resultado-card" style="text-align: center;">
+    <h2 style="margin-bottom: 10px;">{{ intento.evaluacion.titulo }}</h2>
+    <p style="color: #666;">Completada el {{ intento.fecha_fin|date:"d/m/Y H:i" }}</p>
+    
+    <div class="puntaje-grande" style="margin: 30px 0;">
+        {{ porcentaje }}%
+    </div>
+    
+    <div style="display: flex; justify-content: center; gap: 40px; margin: 20px 0;">
+        <div>
+            <div style="font-size: 32px; color: #2ecc71;">✓ {{ correctas }}</div>
+            <div style="color: #666;">Correctas</div>
+        </div>
+        <div>
+            <div style="font-size: 32px; color: #e74c3c;">✗ {{ incorrectas }}</div>
+            <div style="color: #666;">Incorrectas</div>
+        </div>
+    </div>
+    
+    {% if porcentaje >= 70 %}
+        <p style="font-size: 18px; color: #2ecc71; margin-top: 20px;">
+            🎉 ¡Excelente trabajo! Has aprobado la evaluación.
+        </p>
+    {% elif porcentaje >= 50 %}
+        <p style="font-size: 18px; color: #f39c12; margin-top: 20px;">
+            👍 Buen esfuerzo. Sigue practicando para mejorar.
+        </p>
+    {% else %}
+        <p style="font-size: 18px; color: #e74c3c; margin-top: 20px;">
+            💪 No te desanimes. Practica más y lo lograrás.
+        </p>
+    {% endif %}
+</div>
+
+<div class="resultado-card">
+    <h3 style="margin-bottom: 20px;">Detalle de Respuestas</h3>
+    
+    {% for respuesta in respuestas %}
+    <div class="respuesta-item {% if respuesta.es_correcta %}correcta{% else %}incorrecta{% endif %}">
+        <strong>Pregunta {{ forloop.counter }}:</strong> {{ respuesta.pregunta.texto }}<br>
+        <strong>Tu respuesta:</strong> {{ respuesta.opcion_seleccionada.texto }}
+        {% if respuesta.es_correcta %}
+            <span style="color: #28a745; float: right;">✓ Correcta</span>
+        {% else %}
+            <span style="color: #dc3545; float: right;">✗ Incorrecta</span>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<div style="text-align: center; margin-top: 30px;">
+    <a href="/evaluaciones/" class="btn" style="display: inline-block; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 5px;">
+        🏠 Volver a Evaluaciones
+    </a>
+</div>
+{% endblock %}
