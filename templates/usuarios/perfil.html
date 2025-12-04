@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Mi Perfil{% endblock %}
+
+{% block content %}
+<div style="background: white; padding: 30px; border-radius: 10px; max-width: 800px; margin: 0 auto;">
+    <h2 style="margin-bottom: 20px;">👤 Mi Perfil</h2>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div>
+            <strong>Nombre completo:</strong>
+            <p>{{ user.get_full_name }}</p>
+        </div>
+        
+        <div>
+            <strong>Usuario:</strong>
+            <p>{{ user.username }}</p>
+        </div>
+        
+        <div>
+            <strong>Email:</strong>
+            <p>{{ user.email }}</p>
+        </div>
+        
+        <div>
+            <strong>Rol:</strong>
+            <p>{{ perfil.get_rol_display }}</p>
+        </div>
+        
+        {% if perfil.cedula %}
+        <div>
+            <strong>Cédula:</strong>
+            <p>{{ perfil.cedula }}</p>
+        </div>
+        {% endif %}
+        
+        {% if perfil.grado %}
+        <div>
+            <strong>Grado:</strong>
+            <p>{{ perfil.grado }}</p>
+        </div>
+        {% endif %}
+        
+        {% if perfil.institucion %}
+        <div style="grid-column: 1 / -1;">
+            <strong>Institución:</strong>
+            <p>{{ perfil.institucion }}</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div style="margin-top: 30px; display: flex; gap: 10px;">
+        <a href="{% url 'evaluaciones:lista' %}" class="btn">📚 Ir a Evaluaciones</a>
+        <a href="{% url 'usuarios:logout' %}" class="btn" style="background: #e74c3c;">🚪 Cerrar Sesión</a>
+    </div>
+</div>
+{% endblock %}

@@ -9,20 +9,27 @@
         Sistema de evaluación educativa para mejorar capacidades en pruebas internacionales
     </p>
     
-    <div style="margin-top: 30px;">
-        <a href="/admin/" class="btn">Panel de Administración</a>
-        <a href="{% url 'evaluaciones:lista' %}" class="btn">Ver Evaluaciones</a>
-    </div>
-
-    <!-- Demo de HTMX -->
-    <div style="margin-top: 50px; padding: 20px; background: white; border-radius: 5px;">
-        <h3>Demo HTMX - Sin recargar página</h3>
-        <button hx-get="/evaluaciones/" 
-                hx-target="#resultado"
-                class="btn">
-            Cargar Evaluaciones con HTMX
-        </button>
-        <div id="resultado" style="margin-top: 20px;"></div>
-    </div>
+    {% if user.is_authenticated %}
+        <div style="margin-top: 30px;">
+            <p style="margin-bottom: 20px;">Hola, <strong>{{ user.get_full_name|default:user.username }}</strong></p>
+            
+            {% if user.is_superuser or user.is_staff %}
+                <a href="/admin/" class="btn">🔧 Panel de Administración</a>
+            {% endif %}
+            
+            <a href="{% url 'evaluaciones:lista' %}" class="btn">📚 Ver Evaluaciones</a>
+            <a href="{% url 'usuarios:perfil' %}" class="btn">👤 Mi Perfil</a>
+            <a href="{% url 'usuarios:logout' %}" class="btn" style="background: #e74c3c;">🚪 Cerrar Sesión</a>
+        </div>
+    {% else %}
+        <div style="margin-top: 30px;">
+            <a href="{% url 'usuarios:login' %}" class="btn" style="padding: 15px 30px; font-size: 18px;">
+                🔐 Iniciar Sesión
+            </a>
+            <a href="{% url 'usuarios:registro' %}" class="btn" style="padding: 15px 30px; font-size: 18px; background: #2ecc71;">
+                📝 Registrarse
+            </a>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

@@ -44,11 +44,20 @@
 </head>
 <body>
     <header>
-        <div class="container">
+         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
             <h1>Proyecto STEAM PISA - Carchi</h1>
             <p>Mejorando capacidades para evaluaciones internacionales</p>
         </div>
-    </header>
+        {% if user.is_authenticated %}
+        <div style="text-align: right; color: white;">
+            <p>👤 {{ user.get_full_name|default:user.username }}</p>
+            <a href="{% url 'usuarios:perfil' %}" style="color: white; font-size: 12px;">Ver perfil</a> |
+            <a href="{% url 'usuarios:logout' %}" style="color: white; font-size: 12px;">Salir</a>
+        </div>
+        {% endif %}
+    </div>
+</header>
 
     <main class="container">
         {% block content %}{% endblock %}

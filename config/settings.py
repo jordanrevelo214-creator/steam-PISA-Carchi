@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'evaluaciones',
     'estudiantes',
     'reportes',
+    'usuarios',
     'django_htmx',
     'widget_tweaks',
 ]
@@ -134,4 +135,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Configuración de autenticación
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/evaluaciones/'
+LOGOUT_REDIRECT_URL = '/'
 

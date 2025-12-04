@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - STEAM PISA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+        }
+        
+        .login-side {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .login-side h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .login-side p {
+            font-size: 16px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .login-form-side {
+            flex: 1;
+            padding: 60px 40px;
+        }
+        
+        .login-form-side h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .login-form-side .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+        
+        .register-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .messages {
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .alert-error {
+            background: #fee;
+            color: #c33;
+            border-left: 4px solid #c33;
+        }
+        
+        .alert-success {
+            background: #efe;
+            color: #3c3;
+            border-left: 4px solid #3c3;
+        }
+        
+        .alert-info {
+            background: #eef;
+            color: #33c;
+            border-left: 4px solid #33c;
+        }
+        
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+            }
+            
+            .login-side {
+                padding: 40px 30px;
+            }
+            
+            .login-form-side {
+                padding: 40px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-side">
+            <h1>🎓 STEAM PISA</h1>
+            <h2 style="font-size: 24px; margin-bottom: 15px;">Proyecto Carchi</h2>
+            <p>
+                Sistema de evaluación educativa tipo PISA para mejorar las capacidades 
+                de estudiantes de educación secundaria en matemáticas, lectura y ciencias.
+            </p>
+            <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;">
+                Provincia del Carchi, Ecuador
+            </p>
+        </div>
+        
+        <div class="login-form-side">
+            <h2>Iniciar Sesión</h2>
+            <p class="subtitle">Ingresa tus credenciales para acceder</p>
+            
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="username">Usuario o Cédula</label>
+                    <input type="text" 
+                           id="username" 
+                           name="username" 
+                           placeholder="Ingresa tu usuario o cédula"
+                           required 
+                           autofocus>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" 
+                           id="password" 
+                           name="password" 
+                           placeholder="Ingresa tu contraseña"
+                           required>
+                </div>
+                
+                <button type="submit" class="btn-login">
+                    🔐 Iniciar Sesión
+                </button>
+            </form>
+            
+            <div class="register-link">
+                ¿No tienes cuenta? 
+                <a href="{% url 'usuarios:registro' %}">Regístrate aquí</a>
+            </div>
+            
+            <div class="register-link" style="margin-top: 10px;">
+                <a href="/">← Volver al inicio</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
